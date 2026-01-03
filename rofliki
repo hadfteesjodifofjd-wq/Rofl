@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Захар - Мемный Портал</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+  <style>
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'glitch-pulse': 'glitch-pulse 0.1s infinite',
+            'distort': 'distort 0.2s infinite',
+            'noise': 'noise 20s infinite linear',
+            'scanline': 'scanline 0.5s infinite linear',
+            'button-pulse': 'button-pulse 2s infinite',
+            'screenShake': 'screenShake 0.05s infinite'
+          },
+          keyframes: {
+            'glitch-pulse': {
+              '0%': { opacity: '0.4' },
+              '50%': { opacity: '0.8' },
+              '100%': { opacity: '0.4' }
+            },
+            'distort': {
+              '0%': { transform: 'scale(1) rotate(0deg) skew(0deg)' },
+              '25%': { transform: 'scale(1.05) rotate(2deg) skew(3deg)' },
+              '50%': { transform: 'scale(0.95) rotate(-2deg) skew(-3deg)' },
+              '75%': { transform: 'scale(1.02) rotate(1deg) skew(2deg)' },
+              '100%': { transform: 'scale(1) rotate(0deg) skew(0deg)' }
+            },
+            'noise': {
+              '0%': { transform: 'translateX(0) translateY(0)' },
+              '10%': { transform: 'translateX(-1%) translateY(1%)' },
+              '20%': { transform: 'translateX(1%) translateY(-1%)' },
+              '30%': { transform: 'translateX(-1%) translateY(-1%)' },
+              '40%': { transform: 'translateX(1%) translateY(1%)' },
+              '50%': { transform: 'translateX(0) translateY(0)' },
+              '60%': { transform: 'translateX(0.5%) translateY(-0.5%)' },
+              '70%': { transform: 'translateX(-0.5%) translateY(0.5%)' },
+              '80%': { transform: 'translateX(0) translateY(0)' },
+              '90%': { transform: 'translateX(-0.2%) translateY(0.2%)' },
+              '100%': { transform: 'translateX(0) translateY(0)' }
+            },
+            'scanline': {
+              '0%': { transform: 'translateY(-100%)' },
+              '100%': { transform: 'translateY(100%)' }
+            },
+            'button-pulse': {
+              '0%, 100%': { boxShadow: '0 0 15px 5px rgba(255,0,0,0.7)' },
+              '50%': { boxShadow: '0 0 30px 15px rgba(255,0,0,1)' }
+            },
+            'screenShake': {
+              '0%, 100%': { transform: 'translate(0, 0)' },
+              '10%': { transform: 'translate(-10px, 0)' },
+              '20%': { transform: 'translate(10px, 0)' },
+              '30%': { transform: 'translate(-5px, 5px)' },
+              '40%': { transform: 'translate(5px, -5px)' },
+              '50%': { transform: 'translate(-5px, -5px)' },
+              '60%': { transform: 'translate(5px, 5px)' },
+              '70%': { transform: 'translate(-3px, 3px)' },
+              '80%': { transform: 'translate(3px, -3px)' },
+              '90%': { transform: 'translate(0, 0)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-black text-white">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { Laugh, Gift, Zap, Skull } = lucide;
+
+    function App() {
+      const [showScreamer, setShowScreamer] = useState(false);
+      const [showGift, setShowGift] = useState(false);
+      const [glitchText, setGlitchText] = useState(false);
+      const [systemMessages, setSystemMessages] = useState([]);
+      const [screenDistortion, setScreenDistortion] = useState(false);
+
+      const handleGiftClick = () => {
+        setShowGift(true);
+        setTimeout(() => {
+          setGlitchText(true);
+          
+          // Add system messages like in Outcore screamer
+          const messages = [
+            "SYSTEM OVERRIDE INITIATED",
+            "WARNING: UNAUTHORIZED ACCESS DETECTED",
+            "FATAL ERROR: SECURITY PROTOCOL BREACHED",
+            "CORRUPTED MEMORY SEGMENT: 0x7F3A2C",
+            "INTRUDER ALERT - LEVEL 9",
+            "PREPARING TERMINATION SEQUENCE",
+            "YOU SHOULDN'T HAVE DONE THAT",
+            "SYSTEM FAILURE IMMINENT"
+          ];
+          
+          messages.forEach((msg, index) => {
+            setTimeout(() => {
+              setSystemMessages(prev => [...prev, msg]);
+            }, index * 300);
+          });
+          
+          setTimeout(() => {
+            setScreenDistortion(true);
+            setTimeout(() => {
+              setShowScreamer(true);
+            }, 800);
+          }, 1200);
+        }, 1000);
+      };
+
+      if (showScreamer) {
+        return (
+          <div className="fixed inset-0 z-50 bg-black overflow-hidden">
+            {/* CRT scanlines effect */}
+            <div 
+              className="absolute inset-0 opacity-20 pointer-events-none"
+              style={{
+                backgroundImage: `linear-gradient(
+                  to bottom,
+                  transparent 50%,
+                  rgba(0, 255, 0, 0.1) 50%
+                )`,
+                backgroundSize: '100% 4px'
+              }}
+            ></div>
+
+            {/* Static noise background */}
+            <div className="absolute inset-0">
+              <div 
+                className="w-full h-full opacity-30"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                  backgroundSize: 'cover',
+                  animation: 'noise 20s infinite linear'
+                }}
+              ></div>
+            </div>
+
+            {/* Red screen overlays for glitch effect */}
+            <div className="absolute inset-0 bg-red-900 opacity-60 animate-pulse"></div>
+            <div className="absolute inset-0 bg-red-700 opacity-40" style={{ animation: 'glitch-pulse 0.1s infinite' }}></div>
+
+            {/* Main screamer content */}
+            <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
+              {/* System error messages - Outcore style */}
+              <div className="absolute top-8 left-8 right-8">
+                {systemMessages.map((msg, index) => (
+                  <div 
+                    key={index}
+                    className="text-red-400 font-mono text-xl mb-2 px-4 py-2 bg-black/70 border border-red-600 animate-pulse"
+                    style={{
+                      transform: `translateX(${Math.sin(index) * 5}px)`,
+                      textShadow: '0 0 10px #ff0000'
+                    }}
+                  >
+                    &gt; {msg}
+                  </div>
+                ))}
+              </div>
+
+              {/* Main distorted text - like Outcore screaming */}
+              <div className="text-center mb-12 relative">
+                <h1 
+                  className="text-6xl md:text-8xl font-black text-white mb-8 drop-shadow-[0_0_20px_rgba(255,0,0,1)]"
+                  style={{ 
+                    textShadow: '0 0 30px #ff0000, 0 0 60px #ff0000',
+                    letterSpacing: '-2px'
+                  }}
+                >
+                  <div className="block animate-pulse" style={{ animationDelay: '0s' }}>H̸̢̧̨̛E̸̢̧̡̛L̸̢̧̡̛P̵̨̧̡̛</div>
+                  <div className="block mt-2 animate-pulse" style={{ animationDelay: '0.2s' }}>M̵̨̧̡̛E̸̢̧̡̛</div>
+                  <div className="block mt-2 text-red-400 animate-pulse" style={{ animationDelay: '0.4s' }}>I̸̢̧̡̛'̸̢̧̡̛M̵̨̧̡̛ S̸̢̧̡̛C̸̢̧̡̛R̸̢̧̡̛E̸̢̧̡̛A̸̢̧̡̛M̸̢̧̡̛I̸̢̧̡̛N̸̢̧̡̛G̵̨̧̡̛</div>
+                </h1>
+              </div>
+
+              {/* Screamer face - heavily distorted like Outcore */}
+              <div className="relative w-72 h-72 md:w-80 md:h-80 mb-8">
+                {/* Main face container with distortion */}
+                <div 
+                  className="absolute inset-0 bg-gradient-to-br from-red-800 via-red-900 to-black rounded-full flex items-center justify-center border-8 border-red-500 shadow-[0_0_30px_15px_rgba(255,0,0,0.7)]"
+                  style={{
+                    transform: screenDistortion ? 'scale(1.1) rotate(2deg)' : 'scale(1)',
+                    animation: screenDistortion ? 'distort 0.2s infinite' : 'none'
+                  }}
+                >
+                  {/* Eyes - asymmetrical and disturbing */}
+                  <div className="absolute top-1/4 left-1/4 w-10 h-10 bg-white rounded-full border-2 border-red-600">
+                    <div className="absolute top-1 left-1 w-3 h-3 bg-black rounded-full"></div>
+                    <div className="absolute top-2 left-2 w-1 h-1 bg-white rounded-full animate-pulse"></div>
+                  </div>
+                  <div className="absolute top-1/3 right-1/3 w-8 h-8 bg-white rounded-full border-2 border-red-600 transform rotate-12">
+                    <div className="absolute top-0 left-0 w-2 h-2 bg-black rounded-full"></div>
+                    <div className="absolute top-1 left-1 w-0.5 h-0.5 bg-white rounded-full"></div>
+                  </div>
+                  
+                  {/* Mouth - wide open screaming */}
+                  <div className="absolute bottom-1/3 w-28 h-12 bg-black rounded-b-full border-t-4 border-red-600 transform -rotate-3">
+                    <div className="absolute bottom-0 left-2 w-2 h-4 bg-red-400"></div>
+                    <div className="absolute bottom-0 left-6 w-1 h-3 bg-red-400"></div>
+                    <div className="absolute bottom-0 right-4 w-3 h-5 bg-red-400"></div>
+                  </div>
+                  
+                  {/* Tear/blood effect */}
+                  <div className="absolute top-1/3 left-1/4 w-0.5 h-12 bg-red-500 transform -rotate-12"></div>
+                </div>
+                
+                {/* Glitch layers - multiple colored shifts */}
+                <div 
+                  className="absolute inset-0 bg-red-500 opacity-40 rounded-full"
+                  style={{ 
+                    transform: 'translate(-8px, 3px)',
+                    clipPath: 'polygon(0 0, 100% 0, 100% 30%, 0 30%)'
+                  }}
+                ></div>
+                <div 
+                  className="absolute inset-0 bg-blue-500 opacity-50 rounded-full"
+                  style={{ 
+                    transform: 'translate(8px, -3px)',
+                    clipPath: 'polygon(0 70%, 100% 70%, 100% 100%, 0 100%)'
+                  }}
+                ></div>
+                <div 
+                  className="absolute inset-0 bg-green-500 opacity-30 rounded-full"
+                  style={{ 
+                    transform: 'translate(5px, 7px)',
+                    clipPath: 'polygon(30% 0, 70% 0, 70% 100%, 30% 100%)'
+                  }}
+                ></div>
+              </div>
+
+              {/* Screaming text overlay */}
+              <div className="text-3xl md:text-5xl font-black text-white mb-12 text-center space-y-2">
+                <div className="animate-bounce" style={{ animationDelay: '0s', animationDuration: '0.5s' }}>AAAAAA!</div>
+                <div className="animate-bounce" style={{ animationDelay: '0.2s', animationDuration: '0.6s' }}>AAAAAA!</div>
+                <div className="animate-bounce" style={{ animationDelay: '0.4s', animationDuration: '0.7s' }}>AAAAAA!</div>
+              </div>
+
+              {/* Escape button with glitch effect */}
+              <button
+                onClick={() => {
+                  setShowScreamer(false);
+                  setSystemMessages([]);
+                  setScreenDistortion(false);
+                  setShowGift(false);
+                  setGlitchText(false);
+                }}
+                className="px-10 py-5 bg-gradient-to-r from-red-800 to-red-900 hover:from-red-900 hover:to-black text-white font-bold text-2xl rounded-full transition-all duration-300 transform hover:scale-110 shadow-2xl border-4 border-red-600 relative overflow-hidden"
+                style={{ 
+                  textShadow: '0 0 15px rgba(255,0,0,1)',
+                  animation: 'button-pulse 2s infinite'
+                }}
+              >
+                <span className="relative z-10 flex items-center">
+                  ESCAPE (F9)
+                </span>
+                <div className="absolute inset-0 bg-red-500 opacity-30 animate-pulse"></div>
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="min-h-screen">
+          {/* Header */}
+          <header className="text-center py-12 px-4 bg-gradient-to-r from-red-700 to-red-900 shadow-2xl">
+            <div className="max-w-4xl mx-auto">
+              <h1 className="text-6xl md:text-8xl font-black mb-6 animate-bounce">
+                💩 ЗАХАР 💩
+              </h1>
+              <p className="text-2xl md:text-3xl font-semibold tracking-wider">
+                ОФИЦИАЛЬНЫЙ МЕМНЫЙ ПОРТАЛ
+              </p>
+            </div>
+          </header>
+
+          <main className="max-w-4xl mx-auto px-4 py-12">
+            {/* Meme sections */}
+            <section className="mb-16">
+              <div className="bg-red-900/30 backdrop-blur-sm rounded-2xl border-4 border-red-700 p-8 mb-8 animate-pulse">
+                <h2 className="text-4xl font-bold mb-6 text-yellow-400">
+                  ПОЧЕМУ ЗАХАР - ЛОХ?
+                </h2>
+                <div className="space-y-4 text-xl">
+                  <p className="bg-black/30 p-4 rounded-lg">✓ Не может открыть банку</p>
+                  <p className="bg-black/30 p-4 rounded-lg">✓ Путает лево и право даже в зеркале</p>
+                  <p className="bg-black/30 p-4 rounded-lg">✓ Думает, что Wi-Fi работает на батарейках</p>
+                  <p className="bg-black/30 p-4 rounded-lg">✓ Считает до 10 на пальцах... и всё равно ошибается</p>
+                  <p className="bg-black/30 p-4 rounded-lg">✓ Его IQ ниже температуры в холодильнике</p>
+                </div>
+              </div>
+
+              <div className="bg-purple-900/30 backdrop-blur-sm rounded-2xl border-4 border-purple-700 p-8 mb-8">
+                <h2 className="text-4xl font-bold mb-6 text-pink-400">
+                  ФАКТЫ О ЗАХАРЕ
+                </h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="bg-gradient-to-r from-red-800 to-red-900 p-6 rounded-xl">
+                    <h3 className="text-2xl font-bold mb-3">🧠 МОЗГ</h3>
+                    <p className="text-lg">Объем: 0.5 см³<br />Содержимое: воздух и мечты</p>
+                  </div>
+                  <div className="bg-gradient-to-r from-blue-800 to-blue-900 p-6 rounded-xl">
+                    <h3 className="text-2xl font-bold mb-3">💪 СИЛА</h3>
+                    <p className="text-lg">Может поднять: 100 грамм<br />Время удержания: 3 секунды</p>
+                  </div>
+                  <div className="bg-gradient-to-r from-green-800 to-green-900 p-6 rounded-xl">
+                    <h3 className="text-2xl font-bold mb-3">🏃 СКОРОСТЬ</h3>
+                    <p className="text-lg">100 метров: 3 минуты<br />Причина: запнулся о воздух</p>
+                  </div>
+                  <div className="bg-gradient-to-r from-yellow-800 to-yellow-900 p-6 rounded-xl">
+                    <h3 className="text-2xl font-bold mb-3">🎯 ЦЕЛЕУСТРЕМЛЕННОСТЬ</h3>
+                    <p className="text-lg">Цели: нет<br />Планы: мечтать о целях</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-black/50 backdrop-blur-sm rounded-2xl border-4 border-yellow-600 p-8 text-center">
+                <h2 className="text-5xl font-bold mb-6 text-red-400 animate-pulse">
+                  ЗАХАР - ЭТО ПОЛНАЯ КАТАСТРОФА!
+                </h2>
+                <div className="text-7xl mb-8">💩💩💩</div>
+                <p className="text-2xl italic">
+                  "Если бы глупость была болезнью, Захар был бы эпидемией"
+                </p>
+                <div className="text-6xl mt-6 animate-bounce">💀💀💀</div>
+              </div>
+            </section>
+
+            {/* The twist */}
+            <section className="text-center py-12">
+              <div className="bg-gradient-to-r from-green-700 to-emerald-800 rounded-3xl p-8 mb-8 border-4 border-green-500 shadow-2xl">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-yellow-300">
+                  А ТЕПЕРЬ ШУТОЧКА!
+                </h2>
+                <p className="text-2xl md:text-3xl leading-relaxed max-w-3xl mx-auto">
+                  ВСЁ ВЫШЕСКАЗАННОЕ - ЧИСТЕЙШАЯ ШУТКА! 😄<br />
+                  Захар - прекрасный человек, друг и просто крутой чувак!<br />
+                  Мы всех очень любим и ценим! ❤️
+                </p>
+                <div className="text-8xl mt-8 animate-bounce">❤️‍🔥❤️‍🔥❤️‍🔥</div>
+              </div>
+
+              {/* Gift button with glitch effect when loading */}
+              <div className="relative">
+                {!showGift ? (
+                  <button
+                    onClick={handleGiftClick}
+                    className="group relative px-12 py-6 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 hover:from-yellow-600 hover:via-orange-600 hover:to-red-600 text-black font-black text-3xl rounded-2xl shadow-2xl transform transition-all duration-300 hover:scale-105 hover:shadow-3xl border-4 border-yellow-400"
+                  >
+                    <span>ПОЛУЧИТЬ ПОДАРОК 🎁</span>
+                    <div className="absolute inset-0 rounded-2xl bg-white opacity-20 animate-pulse"></div>
+                  </button>
+                ) : (
+                  <div className="text-3xl text-red-400 font-bold mb-4">
+                    {glitchText ? (
+                      <div className="inline-block">
+                        <span className="animate-pulse" style={{ animationDelay: '0s' }}>D̸̢̧̨̛</span>
+                        <span className="animate-pulse" style={{ animationDelay: '0.1s' }}>Ơ̴̢̧̡</span>
+                        <span className="animate-pulse" style={{ animationDelay: '0.2s' }}>N̴̢̧̡̛</span>
+                        <span className="animate-pulse" style={{ animationDelay: '0.3s' }}>&#39;̴̢̧̡̛</span>
+                        <span className="animate-pulse" style={{ animationDelay: '0.4s' }}>T̵̨̧̡̛</span>
+                        <span className="ml-2 animate-pulse" style={{ animationDelay: '0.5s' }}>P̴̢̧̡̛</span>
+                      </div>
+                    ) : (
+                      "Подарок загружается..."
+                    )}
+                    <div className="w-64 h-3 bg-gray-700 rounded-full mx-auto mt-6 overflow-hidden relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-yellow-500 rounded-full animate-pulse"></div>
+                      <div className="absolute inset-0 bg-red-600 rounded-full" style={{ width: '95%' }}></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Easter egg */}
+              <div className="mt-12 text-gray-400 text-sm">
+                P.S. Этот сайт создан с любовью и юмором. Никто не пострадал при создании мемов 🫶
+              </div>
+            </section>
+          </main>
+
+          {/* Footer */}
+          <footer className="text-center py-8 bg-black/30 border-t border-white/20">
+            <p className="text-lg">© 2026 Мемный портал | Made with ❤️ and lots of memes</p>
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
+
